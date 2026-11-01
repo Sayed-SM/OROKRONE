@@ -107,11 +107,7 @@ async function init() {
   if (heading) heading.textContent = document.documentElement.lang === 'ar' ? showcase.heading_ar : showcase.heading_en;
   if (lead) lead.textContent = document.documentElement.lang === 'ar' ? showcase.lead_ar : showcase.lead_en;
   const showcaseSection = qs('#showcase');
-  if (showcase.backgroundImage) {
-    showcaseSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.62)), url("${showcase.backgroundImage}")`;
-    showcaseSection.style.backgroundSize = 'cover';
-    showcaseSection.style.backgroundPosition = 'center';
-  } else {
+  if (showcase.backgroundImage) {\n    const safeBg = String(showcase.backgroundImage).replace(/[\"'()\\s]/g, '');\n    if (safeBg) {\n      showcaseSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.62)), url(\"${safeBg}\")`;\n      showcaseSection.style.backgroundSize = 'cover';\n      showcaseSection.style.backgroundPosition = 'center';\n    }\n  } else {","oldString":"if (showcase.backgroundImage) {\n    showcaseSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.62)), url(\"${showcase.backgroundImage}\")`;\n    showcaseSection.style.backgroundSize = 'cover';\n    showcaseSection.style.backgroundPosition = 'center';\n  } else {","path":"C:\\Users\\opencode2.SAYED\\OROKRONE\\assets\\js\\pages\\home.js
     showcaseSection.style.backgroundImage = '';
     showcaseSection.style.backgroundSize = '';
     showcaseSection.style.backgroundPosition = '';

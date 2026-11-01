@@ -1,8 +1,0 @@
-[functions.place-order]
-verify_jwt = false
-
-[functions.apply-coupon]
-verify_jwt = false
-
-[functions.admin-stats]
-verify_jwt = true

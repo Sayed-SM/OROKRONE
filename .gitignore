@@ -1,6 +1,33 @@
+# Private / development
+_private_project_files/
 .env
 .env.local
 .env.*.local
+
+# Dependencies / logs / coverage
 node_modules/
 *.log
 coverage/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Local builds / temp
+dist/
+build/
+tmp/
+temp/
+*.tmp
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
+supabase/.env
+supabase/config.toml.local
+
+# Misc
+*.bak
+*.old

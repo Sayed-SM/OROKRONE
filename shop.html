@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>المتجر | أوروكرون</title>
+  <meta name="description" content="كل ساعات وإكسسوارات أوروكرون: بحث وفلترة حسب النمط والماركة والسعر.">
+  <meta name="theme-color" content="#FAF6EF">
+  <link rel="icon" href="assets/img/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/shop.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+  <div id="site-header"></div>
+  <main id="main" class="container">
+    <div class="page-head">
+      <nav class="breadcrumbs"><a href="index.html" data-i18n="nav.home"></a><span>/</span><span data-i18n="nav.shop"></span></nav>
+      <h1 data-i18n="shop.title">كل القطع</h1>
+    </div>
+
+    <div class="shop-layout">
+      <aside class="filters-panel" id="filters-panel" aria-label="filters">
+        <div class="between">
+          <h2 class="small" data-i18n="shop.filters">الفلاتر</h2>
+          <button class="btn btn-ghost btn-sm" id="reset-filters" data-i18n="shop.reset">إعادة ضبط</button>
+        </div>
+        <div class="filter-group">
+          <h3 data-i18n="shop.category">الفئة</h3>
+          <div class="filter-options" id="filter-category"></div>
+        </div>
+        <div class="filter-group">
+          <h3 data-i18n="shop.brand">الماركة</h3>
+          <div class="filter-options" id="filter-brand"></div>
+        </div>
+        <div class="filter-group">
+          <h3 data-i18n="shop.strap">السوار</h3>
+          <div class="filter-options" id="filter-strap"></div>
+        </div>
+        <div class="filter-group">
+          <h3 data-i18n="shop.price">السعر</h3>
+          <div class="price-inputs">
+            <input type="number" id="price-min" min="0" placeholder="0" data-i18n-attr="aria-label:shop.from">
+            <input type="number" id="price-max" min="0" placeholder="100000" data-i18n-attr="aria-label:shop.to">
+          </div>
+        </div>
+        <label class="checkbox-line"><input type="checkbox" id="filter-instock"><span data-i18n="shop.inStockOnly"></span></label>
+        <label class="checkbox-line"><input type="checkbox" id="filter-onsale"><span data-i18n="shop.onSale"></span></label>
+      </aside>
+
+      <section>
+        <div class="shop-toolbar">
+          <button class="btn btn-outline btn-sm filters-toggle" id="filters-toggle"></button>
+          <div class="input-with-icon">
+            <input type="search" id="shop-search" data-i18n-attr="placeholder:shop.search" aria-label="search">
+          </div>
+          <select id="shop-sort" data-i18n-attr="aria-label:shop.sort">
+            <option value="featured" data-i18n="shop.sortFeatured"></option>
+            <option value="new" data-i18n="shop.sortNew"></option>
+            <option value="price_asc" data-i18n="shop.sortPriceAsc"></option>
+            <option value="price_desc" data-i18n="shop.sortPriceDesc"></option>
+            <option value="rating" data-i18n="shop.sortRating"></option>
+          </select>
+        </div>
+        <p class="results-count" id="results-count" aria-live="polite"></p>
+        <div class="product-grid" id="shop-grid"></div>
+        <div id="shop-empty"></div>
+      </section>
+    </div>
+  </main>
+  <div id="site-footer"></div>
+</body>
+</html>

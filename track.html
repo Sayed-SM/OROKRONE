@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تتبع الطلب | أوروكرون</title>
+  <meta name="theme-color" content="#FAF6EF">
+  <link rel="icon" href="assets/img/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/track.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+  <div id="site-header"></div>
+  <main id="main" class="container">
+    <div class="page-head center" style="justify-items:center;text-align:center">
+      <h1 data-i18n="track.title">تتبع شحنتك</h1>
+      <p class="muted" data-i18n="track.lead"></p>
+    </div>
+    <div class="track-card">
+      <form class="track-form" id="track-form">
+        <input id="track-code" name="code" required maxlength="24" data-i18n-attr="placeholder:track.ph" aria-label="tracking code">
+        <button class="btn btn-gold" type="submit" data-i18n="track.find">تتبع</button>
+      </form>
+      <div id="track-result" aria-live="polite"></div>
+    </div>
+  </main>
+  <div id="site-footer"></div>
+</body>
+</html>

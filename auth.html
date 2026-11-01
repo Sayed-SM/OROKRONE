@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تسجيل الدخول | أوروكرون</title>
+  <meta name="theme-color" content="#FAF6EF">
+  <link rel="icon" href="assets/img/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+  <div id="site-header"></div>
+  <main id="main" class="container">
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div class="auth-tabs" role="tablist">
+          <button id="tab-login" class="is-active" role="tab" data-i18n="actions.login">تسجيل الدخول</button>
+          <button id="tab-register" role="tab" data-i18n="actions.register">إنشاء حساب</button>
+        </div>
+        <h1 id="auth-title" data-i18n="auth.welcome">أهلاً بعودتك</h1>
+        <p class="muted center" id="auth-lead" data-i18n="auth.loginLead"></p>
+        <form id="auth-form" novalidate>
+          <div class="field hidden" id="name-field"><label for="auth-name" data-i18n="auth.name"></label>
+            <input id="auth-name" name="name" maxlength="90" autocomplete="name"></div>
+          <div class="field"><label for="auth-email" data-i18n="auth.email"></label>
+            <input id="auth-email" name="email" type="email" dir="ltr" required autocomplete="email"></div>
+          <div class="field"><label for="auth-password" data-i18n="auth.password"></label>
+            <input id="auth-password" name="password" type="password" dir="ltr" required autocomplete="current-password"></div>
+          <button class="btn btn-gold btn-block" type="submit" id="auth-submit" data-i18n="actions.login">تسجيل الدخول</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <div id="site-footer"></div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "orokrone-watch-store",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preview": "node serve.mjs 4173",
+    "seed:sql": "node tools/generate-seed.mjs",
+    "test": "node --test"
+  }
+}

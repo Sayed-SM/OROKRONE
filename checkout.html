@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إتمام الطلب | أوروكرون</title>
+  <meta name="theme-color" content="#FAF6EF">
+  <link rel="icon" href="assets/img/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/checkout.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+  <div id="site-header"></div>
+  <main id="main" class="container">
+    <div class="page-head">
+      <h1 data-i18n="checkout.title">إتمام الطلب</h1>
+      <p class="muted" data-i18n="checkout.summaryNote"></p>
+    </div>
+    <div class="checkout-layout" id="checkout-layout">
+      <form id="checkout-form" novalidate>
+        <section class="form-card">
+          <h2 id="contact-title"></h2>
+          <div class="field"><label for="name" data-i18n="checkout.name"></label>
+            <input id="name" name="name" autocomplete="name" required maxlength="90"></div>
+          <div class="form-row">
+            <div class="field"><label for="phone" data-i18n="checkout.phone"></label>
+              <input id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="01012345678" dir="ltr" required maxlength="14"></div>
+            <div class="field"><label for="email" data-i18n="checkout.email"></label>
+              <input id="email" name="email" type="email" autocomplete="email" dir="ltr" maxlength="120"></div>
+          </div>
+        </section>
+        <section class="form-card">
+          <h2 id="address-title"></h2>
+          <div class="form-row">
+            <div class="field"><label for="governorate" data-i18n="checkout.governorate"></label>
+              <select id="governorate" name="governorate" required></select></div>
+            <div class="field"><label for="city" data-i18n="checkout.city"></label>
+              <input id="city" name="city" required maxlength="90"></div>
+          </div>
+          <div class="field"><label for="address" data-i18n="checkout.street"></label>
+            <textarea id="address" name="address" required maxlength="400"></textarea></div>
+          <div class="field"><label for="notes" data-i18n="checkout.notes"></label>
+            <input id="notes" name="notes" maxlength="500"></div>
+        </section>
+        <section class="form-card">
+          <h2 id="payment-title"></h2>
+          <div class="payment-option" id="payment-option"></div>
+        </section>
+      </form>
+      <aside class="summary-card" id="checkout-summary"></aside>
+    </div>
+    <div id="checkout-empty"></div>
+  </main>
+  <div id="site-footer"></div>
+</body>
+</html>

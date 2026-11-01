@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>أوروكرون — OROKRONE | صالة ساعات فاخرة</title>
+  <meta name="description" content="أوروكرون: صالة ساعات فاخرة بتجربة عرض تفاعلية. ساعات أصلية بضمان سنتين، دفع عند الاستلام وشحن لكل محافظات مصر.">
+  <meta name="theme-color" content="#FAF6EF">
+  <link rel="icon" href="assets/img/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/showcase.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/home.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+  <div id="site-header"></div>
+
+  <main id="main">
+    <!-- ================= Luxury Watch Showcase ================= -->
+    <section class="showcase-section" id="showcase" aria-label="Luxury Watch Showcase">
+      <div class="container">
+        <div class="showcase-hero">
+          <span class="eyebrow" data-i18n="home.heroKicker">صالة عرض تفاعلية</span>
+          <h1 class="display" data-i18n="home.heroTitle">الوقتُ يستحق أن يُقتنى</h1>
+          <p class="lead" data-i18n="home.heroLead"></p>
+          <div class="cluster" style="justify-content:center">
+            <a class="btn btn-gold btn-lg" href="shop.html" data-i18n="home.heroCta">ابدأ الجولة</a>
+            <a class="btn btn-outline btn-lg" href="shop.html" data-i18n="home.heroSecondary">كل الساعات</a>
+          </div>
+        </div>
+      </div>
+      <div class="stage" id="stage" aria-label="منصة عرض الساعات"></div>
+      <div class="container">
+        <div class="stage-caption" aria-live="polite"></div>
+        <div class="stage-controls">
+          <button class="icon-btn stage-nav" data-stage-prev aria-label="السابق"></button>
+          <div class="stage-dots" role="tablist" aria-label="الساعات"></div>
+          <button class="icon-btn stage-nav" data-stage-next aria-label="التالي"></button>
+          <button class="icon-btn autoplay-btn" aria-label="العرض التلقائي" title="Autoplay"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Trust strip ================= -->
+    <section class="container trust-strip reveal" id="trust-strip"></section>
+
+    <!-- ================= Bestsellers ================= -->
+    <section class="section container" id="bestsellers">
+      <div class="between section-head reveal">
+        <div>
+          <span class="eyebrow">OROKRONE</span>
+          <h2 class="section-title display" data-i18n="home.bestsellers">الأكثر طلباً</h2>
+          <p class="muted" data-i18n="home.bestsellersLead"></p>
+        </div>
+        <a class="btn btn-outline" href="shop.html" data-i18n="actions.viewAll">عرض الكل</a>
+      </div>
+      <div class="product-grid" id="featured-grid"></div>
+    </section>
+
+    <!-- ================= Collections ================= -->
+    <section class="section container">
+      <div class="section-head center reveal">
+        <h2 class="section-title display" data-i18n="home.collections">تسوّق حسب النمط</h2>
+        <p class="muted" data-i18n="home.collectionsLead"></p>
+      </div>
+      <div class="collections-grid" id="collections-grid"></div>
+    </section>
+
+    <!-- ================= Offer ================= -->
+    <section class="container">
+      <div class="offer-banner reveal">
+        <div>
+          <span class="eyebrow" data-i18n="home.offerTitle">هدية أوروكرون</span>
+          <h2 class="display">WELCOME10</h2>
+          <p data-i18n="home.offerLead"></p>
+        </div>
+        <button class="btn btn-primary btn-lg" id="copy-coupon" data-i18n="home.offerCta">استخدم الكود</button>
+      </div>
+    </section>
+
+    <!-- ================= Craft ================= -->
+    <section class="section container craft-section">
+      <div class="craft-art reveal" id="craft-art"></div>
+      <div class="craft-copy reveal">
+        <span class="eyebrow">27-point inspection</span>
+        <h2 class="section-title display" data-i18n="home.craftTitle"></h2>
+        <p class="lead" data-i18n="home.craftLead"></p>
+        <div class="craft-features" id="craft-features"></div>
+        <div class="stats-row" id="stats-row"></div>
+      </div>
+    </section>
+
+    <!-- ================= Testimonials ================= -->
+    <section class="section container">
+      <div class="section-head center reveal">
+        <h2 class="section-title display" data-i18n="home.reviewsTitle">قالوا عن أوروكرون</h2>
+      </div>
+      <div class="testimonials-grid" id="testimonials-grid"></div>
+    </section>
+
+    <!-- ================= Newsletter ================= -->
+    <section class="container">
+      <div class="newsletter reveal">
+        <h2 class="display" data-i18n="home.newsletter"></h2>
+        <p class="muted" data-i18n="home.newsletterLead"></p>
+        <form id="newsletter-form" class="newsletter-form" novalidate>
+          <input type="email" name="email" required data-i18n-attr="placeholder:home.newsletterPh" aria-label="email">
+          <button class="btn btn-gold" type="submit" data-i18n="actions.send">إرسال</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>دخول الإدارة | OROKRONE</title><meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/tokens.css"><link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css"><link rel="stylesheet" href="../assets/css/admin.css">
+  <script type="module" src="../assets/js/pages/admin/login.js"></script>
+</head>
+<body class="admin-login-page">
+  <main class="admin-login-wrap">
+    <a class="admin-brand" href="../index.html"><span class="admin-brand-mark">◷</span><span>OROKRONE<small>CONTROL ROOM</small></span></a>
+    <button class="admin-login-language" type="button" data-lang-toggle>العربية / EN</button>
+    <form class="admin-login-card" id="admin-login-form" novalidate>
+      <span class="eyebrow" data-i18n="admin.loginTitle">دخول الإدارة</span>
+      <h1 class="display" data-i18n="admin.dashboard">لوحة التحكم</h1>
+      <p class="muted" data-i18n="admin.loginLead"></p>
+      <div class="field"><label for="email" data-i18n="auth.email"></label><input id="email" name="email" type="email" required autocomplete="username" dir="ltr"></div>
+      <div class="field"><label for="password" data-i18n="auth.password"></label><input id="password" name="password" type="password" required autocomplete="current-password" dir="ltr"></div>
+      <p id="admin-login-error" class="field-error" role="alert"></p>
+      <button class="btn btn-gold btn-block" type="submit" data-i18n="actions.login">تسجيل الدخول</button>
+      <a class="btn btn-ghost btn-block" href="../index.html" data-i18n="actions.back">رجوع</a>
+      <p class="admin-demo-hint" hidden>Demo: admin@orokrone.demo / admin1234</p>
+    </form>
+  </main>
+</body>
+</html>

@@ -4,18 +4,18 @@
   min-block-size: 48px; padding: .8rem 1.7rem;
   border-radius: var(--r-pill); border: 1px solid transparent;
   font-weight: 700; font-size: var(--fs-base); line-height: 1.2;
-  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast),
-    background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
   position: relative; overflow: hidden; white-space: nowrap;
 }
-.btn:active { transform: translateY(1px) scale(.99); }
+.btn:active { transform: translateY(1px) scale(.98); }
 .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; box-shadow: none; }
-.btn-primary { background: var(--surface); border-color: var(--black); color: var(--black); }
-.btn-primary:hover:not(:disabled) { background: var(--grey-100); box-shadow: var(--shadow-gold); transform: translateY(-2px); }
+.btn-primary { background: var(--black); border-color: var(--black); color: #FFFFFF; }
+.btn-primary:hover:not(:disabled) { background: var(--grey-800); box-shadow: var(--shadow-gold); transform: translateY(-2px); }
 .btn-gold { background: var(--black); color: #FFFFFF; }
 .btn-gold::after {
   content: ""; position: absolute; inset-block: 0; inset-inline-start: -80%; inline-size: 45%;
-  background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent);
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.15), transparent);
   transform: skewX(-18deg); transition: inset-inline-start .6s var(--ease-out); pointer-events: none;
 }
 .btn-gold:hover:not(:disabled) { box-shadow: var(--shadow-gold); transform: translateY(-2px); }
@@ -24,7 +24,7 @@
 .btn-outline:hover:not(:disabled) { border-color: var(--gold-400); background: var(--gold-50); }
 .btn-ghost { color: var(--ink-700); }
 .btn-ghost:hover:not(:disabled) { background: var(--ivory-200); }
-.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger { background: #DC2626; color: #fff; }
 .btn-sm { min-block-size: 44px; padding: .5rem 1rem; font-size: var(--fs-sm); }
 .btn-lg { min-block-size: 56px; padding: 1rem 2.2rem; font-size: var(--fs-lg); }
 .btn-block { inline-size: 100%; }
@@ -202,11 +202,11 @@ table.data-table { inline-size: 100%; border-collapse: collapse; font-size: var(
 .tl-item.is-pending { opacity: .55; }
 
 /* ============ Header ============ */
-.announce { background: var(--ink-900); color: var(--gold-100); font-size: var(--fs-sm); text-align: center; padding: .5rem 1rem; }
-.announce strong { color: var(--gold-300); }
+.announce { background: var(--ink-900); color: #FFFFFF; font-size: var(--fs-base); text-align: center; padding: .65rem 1.25rem; font-weight: 500; letter-spacing: .02em; }
+.announce strong { color: #D0D0D0; }
 .site-header {
   position: sticky; inset-block-start: 0; z-index: var(--z-header);
-  background: rgba(250, 246, 239, .88); backdrop-filter: blur(16px);
+  background: rgba(250, 246, 239, .95); backdrop-filter: blur(12px);
   border-block-end: 1px solid var(--border);
 }
 .header-inner { display: flex; align-items: center; gap: var(--sp-4); block-size: var(--header-h); }
@@ -336,4 +336,59 @@ body:has(.site-header) .site-header:hover { box-shadow: 0 10px 28px rgba(0,0,0,.
 @media (prefers-reduced-motion: reduce) {
   .product-card, .badge, .section-head, .toast, .dialog-overlay.is-open .dialog { animation: none !important; }
   .watch-photo, .product-card, .product-art, .icon-btn, .brand-mark { transition: none !important; }
+}
+
+/* ============ Governorate Selector ============ */
+.gov-selector { position: relative; }
+.gov-trigger {
+  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+  width: 100%; min-block-size: 48px; padding: .75rem 1rem;
+  border: 1px solid var(--border-strong); border-radius: var(--r-md);
+  background: var(--surface); color: var(--text); font-size: var(--fs-base);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.gov-trigger:hover { border-color: var(--ink-700); }
+.gov-trigger:focus-visible { outline: 2px solid var(--ink-900); outline-offset: 2px; }
+.gov-trigger .icon { flex-shrink: 0; color: var(--text-muted); }
+.gov-panel {
+  position: absolute; inset-block-start: calc(100% + .5rem); inset-inline-start: 0; inset-inline-end: 0;
+  background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg); z-index: var(--z-dialog);
+  max-block-size: 320px; overflow: hidden; display: flex; flex-direction: column;
+}
+.gov-search-wrap {
+  display: flex; align-items: center; gap: .5rem; padding: .75rem;
+  border-block-end: 1px solid var(--border);
+}
+.gov-search-wrap .icon { color: var(--text-muted); flex-shrink: 0; }
+.gov-search-wrap input {
+  flex: 1; border: none; outline: none; font-size: var(--fs-base); background: transparent;
+  padding: .25rem; color: var(--text);
+}
+.gov-list { overflow-y: auto; flex: 1; padding: .25rem; }
+.gov-option {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .75rem 1rem; border-radius: var(--r-sm); cursor: pointer;
+  transition: background var(--dur-fast);
+  min-block-size: 44px;
+}
+.gov-option:hover { background: var(--grey-100); }
+.gov-option.is-selected { background: var(--grey-200); font-weight: 700; }
+.gov-option .gov-fee { font-size: var(--fs-sm); color: var(--text-muted); }
+.gov-option .gov-check { color: var(--ink-900); }
+.gov-empty { padding: 1.5rem; text-align: center; color: var(--text-muted); font-size: var(--fs-sm); }
+
+/* Mobile bottom sheet */
+@media (max-width: 600px) {
+  .gov-panel {
+    position: fixed; inset: 0; inset-block-start: auto; inset-inline: 0;
+    max-block-size: 70vh; border-radius: var(--r-xl) var(--r-xl) 0 0;
+    border-block-end: none; border-inline: none;
+    box-shadow: 0 -8px 40px rgba(0,0,0,.15);
+  }
+  .gov-panel::before {
+    content: ''; display: block; inline-size: 40px; block-size: 4px;
+    background: var(--grey-300); border-radius: 2px; margin: .75rem auto .25rem;
+  }
+  .gov-option { min-block-size: 48px; }
 }

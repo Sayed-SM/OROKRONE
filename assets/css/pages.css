@@ -4,7 +4,7 @@
 .section-head .section-title { margin-block: .2rem .3rem; }
 
 /* Home — trust */
-.trust-strip { --marquee-duration: 34s; position: relative; overflow: hidden; padding-block: var(--sp-5); margin-block: var(--sp-2); border-block: 1px solid var(--border); background: var(--surface); }
+.trust-strip { --marquee-duration: 34s; position: relative; overflow: hidden; padding-block: var(--sp-5); margin-block: var(--sp-2); border-block: 1px solid var(--border-strong); background: var(--surface); }
 .trust-strip::before, .trust-strip::after { content: ""; position: absolute; inset-block: 0; inline-size: 70px; z-index: 2; pointer-events: none; }
 .trust-strip::before { inset-inline-start: 0; background: linear-gradient(90deg, #fff, transparent); }
 .trust-strip::after { inset-inline-end: 0; background: linear-gradient(270deg, #fff, transparent); }

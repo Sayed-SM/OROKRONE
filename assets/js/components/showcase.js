@@ -70,7 +70,7 @@ export function initShowcase(host, products) {
       const scale = 0.6 + 0.45 * front + Math.pow(front, 4) * 0.08;
       node.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
       node.style.zIndex = String(Math.round(front * 100) + 1);
-      node.style.opacity = String(0.55 + front * 0.45);
+      node.style.opacity = String(0.7 + front * 0.3);
       node.classList.toggle('is-active', front > 0.985);
       node.tabIndex = front > 0.6 ? 0 : -1;
       if (depth > best.depth) best = { depth, index: i };

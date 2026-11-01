@@ -44,12 +44,106 @@ function renderStatics() {
   qs('#payment-title').innerHTML = `${icon('wallet')}<span>${t('checkout.payment')}</span>`;
   qs('#payment-option').innerHTML = `${icon('wallet', 'icon-lg')}<div><strong>${t('checkout.cod')}</strong><p class="muted small">${t('checkout.codD')}</p></div>`;
   const select = qs('#governorate');
-  const current = select.value;
+  const current = select.value || (rates[0]?.governorate || '');
   select.innerHTML = rates.map((r) => `
     <option value="${esc(r.governorate)}" data-fee="${r.fee}">
       ${document.documentElement.lang === 'ar' ? r.governorate : r.governorate_en} — ${r.fee ? money(r.fee) : ''}
     </option>`).join('');
-  select.value = current || rates[0].governorate;
+  select.value = current;
+
+  // Render custom governorate dropdown
+  const list = qs('#gov-list');
+  if (list) {
+    list.innerHTML = rates.map((r) => `
+      <div class="gov-option" data-value="${esc(r.governorate)}" role="option" tabindex="0">
+        <span>${document.documentElement.lang === 'ar' ? r.governorate : r.governorate_en}</span>
+        <span class="gov-fee">${r.fee ? money(r.fee) : t('cart.freeShipping')}</span>
+      </div>`).join('');
+  }
+  const label = qs('#gov-label');
+  const selectedRate = rates.find((r) => r.governorate === current);
+  if (label && selectedRate) {
+    label.textContent = document.documentElement.lang === 'ar' ? selectedRate.governorate : selectedRate.governorate_en;
+  }
+}
+
+// Governorate dropdown logic
+function initGovDropdown() {
+  const trigger = qs('#gov-trigger');
+  const panel = qs('#gov-panel');
+  const search = qs('#gov-search');
+  const list = qs('#gov-list');
+  const label = qs('#gov-label');
+  const select = qs('#governorate');
+  if (!trigger || !panel || !list) return;
+
+  function open() {
+    panel.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+    if (search) { search.value = ''; search.focus(); }
+    filterList('');
+  }
+  function close() {
+    panel.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.focus();
+  }
+  function selectGov(value) {
+    select.value = value;
+    const rate = rates.find((r) => r.governorate === value);
+    if (label && rate) label.textContent = document.documentElement.lang === 'ar' ? rate.governorate : rate.governorate_en;
+    list.querySelectorAll('.gov-option').forEach((opt) => {
+      opt.classList.toggle('is-selected', opt.dataset.value === value);
+    });
+    close();
+    renderSummary();
+  }
+  function filterList(q) {
+    const lower = q.toLowerCase();
+    let visible = 0;
+    list.querySelectorAll('.gov-option').forEach((opt) => {
+      const text = opt.textContent.toLowerCase();
+      const show = !q || text.includes(lower);
+      opt.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    let empty = list.querySelector('.gov-empty');
+    if (visible === 0) {
+      if (!empty) {
+        empty = document.createElement('div');
+        empty.className = 'gov-empty';
+        empty.textContent = 'لا توجد نتائج';
+        list.appendChild(empty);
+      }
+    } else if (empty) {
+      empty.remove();
+    }
+  }
+
+  trigger.addEventListener('click', () => {
+    if (panel.hidden) open(); else close();
+  });
+  if (search) {
+    search.addEventListener('input', (e) => filterList(e.target.value));
+  }
+  list.addEventListener('click', (e) => {
+    const opt = e.target.closest('.gov-option');
+    if (opt) selectGov(opt.dataset.value);
+  });
+  list.addEventListener('keydown', (e) => {
+    const opts = [...list.querySelectorAll('.gov-option:not([style*="display: none"])')];
+    const idx = opts.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); opts[Math.min(idx + 1, opts.length - 1)]?.focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); opts[Math.max(idx - 1, 0)]?.focus(); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (document.activeElement?.dataset?.value) selectGov(document.activeElement.dataset.value); }
+    else if (e.key === 'Escape') { e.preventDefault(); close(); }
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.gov-selector')) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden) close();
+  });
 }
 
 async function init() {
@@ -67,6 +161,7 @@ async function init() {
   }
 
   renderStatics();
+  initGovDropdown();
   renderSummary();
   qs('#governorate').addEventListener('change', renderSummary);
   window.addEventListener('cart:change', renderSummary);

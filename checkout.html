@@ -41,7 +41,20 @@
           <h2 id="address-title"></h2>
           <div class="form-row">
             <div class="field"><label for="governorate" data-i18n="checkout.governorate"></label>
-              <select id="governorate" name="governorate" required></select></div>
+              <div class="gov-selector" id="gov-selector">
+                <button type="button" class="gov-trigger" id="gov-trigger" aria-haspopup="listbox" aria-expanded="false">
+                  <span id="gov-label">المحافظة</span>
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="gov-panel" id="gov-panel" role="listbox" hidden>
+                  <div class="gov-search-wrap">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+                    <input type="text" id="gov-search" placeholder="بحث..." autocomplete="off">
+                  </div>
+                  <div class="gov-list" id="gov-list"></div>
+                </div>
+              </div>
+              <select id="governorate" name="governorate" required style="position:absolute;opacity:0;pointer-events:none;height:0;width:0"></select></div>
             <div class="field"><label for="city" data-i18n="checkout.city"></label>
               <input id="city" name="city" required maxlength="90"></div>
           </div>

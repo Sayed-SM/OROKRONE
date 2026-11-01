@@ -4,7 +4,7 @@
 .section-head .section-title { margin-block: .2rem .3rem; }
 
 /* Home — trust */
-.trust-strip { --marquee-duration: 34s; position: relative; overflow: hidden; padding-block: var(--sp-5); margin-block: var(--sp-2); border-block: 1px solid var(--border); background: #FFFFFF; }
+.trust-strip { --marquee-duration: 34s; position: relative; overflow: hidden; padding-block: var(--sp-5); margin-block: var(--sp-2); border-block: 1px solid var(--border); background: var(--surface); }
 .trust-strip::before, .trust-strip::after { content: ""; position: absolute; inset-block: 0; inline-size: 70px; z-index: 2; pointer-events: none; }
 .trust-strip::before { inset-inline-start: 0; background: linear-gradient(90deg, #fff, transparent); }
 .trust-strip::after { inset-inline-end: 0; background: linear-gradient(270deg, #fff, transparent); }
@@ -17,15 +17,13 @@
 @keyframes trustMarquee { from { transform: translateX(0) skewX(-7deg); } to { transform: translateX(-50%) skewX(-7deg); } }
 [dir="rtl"] .trust-strip-track { animation-name: trustMarqueeRtl; }
 @keyframes trustMarqueeRtl { from { transform: translateX(0) skewX(7deg); } to { transform: translateX(50%) skewX(7deg); } }
-.trust-item { display: flex; gap: .9rem; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.1rem 1.3rem; }
-.trust-item .icon { color: var(--gold-500); }
-.trust-item p { margin: 0; }
+
 
 /* Home — collections */
 .collections-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-5); }
 .collection-card {
   position: relative; display: grid; overflow: hidden; border-radius: var(--r-lg);
-  background: linear-gradient(160deg, #FFFFFF, var(--ivory-200)); border: 1px solid var(--border);
+  background: linear-gradient(160deg, var(--surface), var(--ivory-200)); border: 1px solid var(--border);
   transition: transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med);
 }
 .collection-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
@@ -41,7 +39,7 @@
 .offer-banner {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-5);
   padding: var(--sp-6); border-radius: var(--r-xl); position: relative; overflow: hidden;
-  background: linear-gradient(120deg, #FFFFFF, #E8E8E8 45%, #CFCFCF); border: 1px solid var(--grey-300);
+  background: linear-gradient(120deg, var(--surface), var(--grey-200) 45%, var(--grey-300)); border: 1px solid var(--grey-300);
 }
 .offer-banner::after { content: ""; position: absolute; inset-inline-end: -60px; inset-block-start: -60px; inline-size: 260px; block-size: 260px; border-radius: 50%; border: 30px solid rgba(255,255,255,.35); }
 .offer-banner h2 { font-size: var(--fs-3xl); letter-spacing: .08em; }
@@ -225,7 +223,8 @@ details.acc p { margin-block-start: .7rem; color: var(--text-muted); }
 .stage-media .watch-art { border-radius: 20px; }
 @media (max-width: 900px) { .stage-media { inline-size: clamp(126px, 19vw, 160px); } }
 @media (max-width: 600px) { .stage-media { inline-size: 124px; } }
-  .collections-grid { grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+@media (max-width: 600px) {
+  .collections-grid { grid-template-columns: 1fr; gap: var(--sp-3); }
   .collection-art { block-size: 150px; }
   .collection-art .watch-art { block-size: 140px; }
   .cart-item { grid-template-columns: 84px 1fr; }

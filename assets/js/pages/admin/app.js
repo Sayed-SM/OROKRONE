@@ -111,7 +111,14 @@ function productDialog(product = {}) {
       <div class="field"><label>${t('admin.oldPrice')}</label><input name="old_price" type="number" min="0" step="1" value="${product.old_price || ''}"></div>
       <div class="field"><label>${t('admin.stock')}</label><input name="stock" type="number" min="0" step="1" value="${product.stock ?? 0}" required></div>
       <div class="field"><label>${t('admin.brand')}</label><input name="brand" value="${esc(product.brand || '')}" required maxlength="60"></div>
-      <div class="field wide"><label>Image file</label><select name="image_path">${opts(imageOptions, product.image_path || '')}</select></div>
+      <div class="field wide"><label>Image</label>
+  <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+    ${product.image_path ? `<img src="${esc(product.image_path)}" alt="" style="max-block-size:80px;border-radius:var(--r-sm);border:1px solid var(--border)" class="admin-image-preview">` : '<span class="muted small admin-no-image">No image</span>'}
+    <input type="file" name="image_file" accept="image/jpeg,image/png,image/webp" style="flex:1">
+    <button type="button" class="btn btn-ghost btn-sm" data-remove-image ${!product.image_path ? 'hidden' : ''}>Remove</button>
+  </div>
+  <input type="hidden" name="image_path" value="${esc(product.image_path || '')}">
+</div>
       <label class="checkbox-line"><input name="active" type="checkbox" ${product.active !== false ? 'checked' : ''}><span>${t('admin.active')}</span></label>
       <label class="checkbox-line"><input name="featured" type="checkbox" ${product.featured ? 'checked' : ''}><span>${t('admin.featured')}</span></label>
       <div class="field wide"><label>${t('product.description')} (AR)</label><textarea name="description_ar" maxlength="1200">${esc(product.description_ar || '')}</textarea></div>
@@ -120,16 +127,69 @@ function productDialog(product = {}) {
     </form>`;
   const dlg = dialog({ title: t(isNew ? 'admin.newProduct' : 'admin.editProduct'), content, size: 'lg' });
   dlg.el.querySelector('[data-close]').addEventListener('click', dlg.close);
+
+  const removeImgBtn = dlg.el.querySelector('[data-remove-image]');
+  if (removeImgBtn) {
+    removeImgBtn.addEventListener('click', () => {
+      removeImgBtn.dataset.removed = 'true';
+      removeImgBtn.hidden = true;
+      const preview = dlg.el.querySelector('.admin-image-preview');
+      if (preview) preview.style.display = 'none';
+    });
+  }
+
+  const fileInput = dlg.el.querySelector('input[name="image_file"]');
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const preview = dlg.el.querySelector('.admin-image-preview');
+      if (preview) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = '';
+      }
+      if (removeImgBtn) removeImgBtn.hidden = false;
+    });
+  }
+
   dlg.el.querySelector('form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const text = (key) => String(fd.get(key) || '').trim();
+    const submitBtn = e.currentTarget.querySelector('[type="submit"]');
+    submitBtn.classList.add('is-loading'); submitBtn.disabled = true;
+
+    const removeBtn = dlg.el.querySelector('[data-remove-image]');
+    const fileInput = e.currentTarget.querySelector('input[name="image_file"]');
+    let imagePath = text('image_path') || null;
+
+    if (removeBtn && removeBtn.dataset.removed === 'true') {
+      if (imagePath) { try { await admin.deleteImage(imagePath); } catch { /* ignore */ } }
+      imagePath = null;
+    }
+
+    const file = fileInput?.files?.[0];
+    if (file) {
+      try {
+        const result = await admin.uploadImage(id, file);
+        if (imagePath && imagePath !== result.url) {
+          try { await admin.deleteImage(imagePath); } catch { /* ignore */ }
+        }
+        imagePath = result.url;
+      } catch (err) {
+        console.error('[admin] image upload failed:', err);
+        toast(t('toast.error'), { type: 'error' });
+        submitBtn.classList.remove('is-loading'); submitBtn.disabled = false;
+        return;
+      }
+    }
+
     const data = {
       id, slug: (product.slug || text('name_en')).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
       name_ar: text('name_ar'), name_en: text('name_en'), sku: text('sku'), brand: text('brand'), category: text('category'),
       price: Number(fd.get('price')), old_price: fd.get('old_price') ? Number(fd.get('old_price')) : null,
       stock: Math.max(0, Math.floor(Number(fd.get('stock')) || 0)), active: fd.has('active'), featured: fd.has('featured'),
-      image_path: text('image_path') || null, description_ar: text('description_ar'), description_en: text('description_en'),
+      image_path: imagePath, description_ar: text('description_ar'), description_en: text('description_en'),
       design: product.design || { case: 'steel', dial: 'black', strap: 'bracelet', style: 'dress' },
       specs: product.specs || { case_size: '40 mm', movement_ar: 'أوتوماتيك', movement_en: 'Automatic', glass_ar: 'زفير', glass_en: 'Sapphire', water: '50 m', strap_ar: 'فولاذ', strap_en: 'Steel' },
     };

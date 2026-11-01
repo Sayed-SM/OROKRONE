@@ -415,6 +415,26 @@ export const admin = {
       return computeStats(data || [], await listProducts({ includeInactive: true }));
     }, () => computeStats(localOrders(), localProducts()));
   },
+
+  async uploadImage(productId, file) {
+    const sb = await getSupabase();
+    if (!sb) throw new Error('backend_unavailable');
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+    const path = `${productId}/${Date.now()}.${ext}`;
+    const { data, error } = await sb.storage.from('product-images').upload(path, file, { upsert: true });
+    if (error) throw error;
+    const { data: urlData } = sb.storage.from('product-images').getPublicUrl(path);
+    return { url: urlData.publicUrl, path };
+  },
+
+  async deleteImage(imageUrl) {
+    const sb = await getSupabase();
+    if (!sb) return;
+    const match = imageUrl.match(/product-images\/(.+)$/);
+    if (match) {
+      await sb.storage.from('product-images').remove([match[1]]);
+    }
+  },
 };
 
 function computeStats(orders, products) {

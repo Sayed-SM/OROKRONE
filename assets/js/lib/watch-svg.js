@@ -268,6 +268,14 @@ function renderAccessory(kind, opts = {}) {
 
 export function productArt(product, opts = {}) {
   const candidate = product.image || product.image_path || PRODUCT_IMAGES[product.id];
+  // If candidate is a full URL (Supabase Storage), use it directly
+  if (typeof candidate === 'string' && /^https?:\/\//.test(candidate)) {
+    const alt = esc((getLang() === 'ar' ? product.name_ar : product.name_en) || product.name_en || product.name_ar || 'watch');
+    return `<img class="watch-art watch-photo" src="${candidate}" alt="${alt}"
+      data-design="${esc(JSON.stringify(product.design || {}))}" width="600" height="720" decoding="async"
+      ${opts.eager ? 'fetchpriority="high"' : 'loading="lazy"'}>`;
+  }
+  // If candidate is a filename, use local path
   const file = typeof candidate === 'string' && /^[\w.-]+\.jpe?g$/i.test(candidate) && !candidate.includes('..')
     ? candidate : null;
   if (file) {

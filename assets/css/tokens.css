@@ -11,7 +11,7 @@
   --grey-300: #DDDDDD;
   --grey-400: #C4C4C4;
   --grey-500: #6B6B6B;
-  --grey-600: #6E6E6E;
+  --grey-600: #5A5A5A;
   --grey-700: #4A4A4A;
   --grey-800: #2B2B2B;
   --grey-900: #141414;
@@ -22,7 +22,7 @@
   --surface: #FFFFFF;
   --surface-2: var(--grey-50);
   --text: var(--black);
-  --text-muted: var(--grey-600);
+  --text-muted: #5A5A5A;
   --border: #E6E6E6;
   --border-strong: #D2D2D2;
   --primary: var(--black);

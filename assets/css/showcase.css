@@ -100,12 +100,12 @@
 .stage-media .watch-art {
   inline-size: 100%; block-size: 100%; position: relative; z-index: 2;
   object-fit: contain; object-position: center; border-radius: 16px;
-  filter: grayscale(1) contrast(1.06) drop-shadow(0 10px 12px #0003);
+  filter: contrast(1.06) drop-shadow(0 10px 12px #0003);
   transition: filter .35s, transform .45s var(--ease-spring);
 }
 .stage-media:has(.watch-photo[data-fallback="true"]) { background: #FFFFFF; }
 .stage-item:hover .stage-media, .stage-item:focus-visible .stage-media { translate: 0 -6px; transform: scale(1.04); box-shadow: 0 24px 42px #000A, inset 0 1px #FFFFFF; border-radius: 50%; }
-.stage-item:hover .stage-media .watch-art, .stage-item:focus-visible .stage-media .watch-art { filter: grayscale(1) contrast(1.12) drop-shadow(0 16px 18px #0005); }
+.stage-item:hover .stage-media .watch-art, .stage-item:focus-visible .stage-media .watch-art { filter: contrast(1.12) drop-shadow(0 16px 18px #0005); }
 .stage-item.is-active .stage-media { translate: 0 -24px; box-shadow: 0 28px 50px #000B, inset 0 1px #FFFFFF; }
 
 .podium { display: none; }

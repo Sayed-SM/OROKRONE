@@ -59,7 +59,7 @@ body[data-admin-page] { background: #F3F3F3; }
 .admin-low-stock a:hover { background: #EBEBEB; }
 .admin-product-cell { display: flex; align-items: center; gap: .7rem; min-inline-size: 210px; }
 .admin-product-thumb { inline-size: 46px; block-size: 52px; border-radius: 8px; overflow: hidden; background: #F0F0F0; flex: none; }
-.admin-product-thumb img { inline-size: 100%; block-size: 100%; object-fit: contain; filter: grayscale(1); }
+.admin-product-thumb img { inline-size: 100%; block-size: 100%; object-fit: contain; filter: none; }
 .admin-product-cell strong, .admin-product-cell small { display: block; }
 .admin-product-cell small { color: #777; }
 .admin-table-actions { display: flex; align-items: center; gap: .25rem; }

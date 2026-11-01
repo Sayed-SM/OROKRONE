@@ -279,11 +279,11 @@ table.data-table { inline-size: 100%; border-collapse: collapse; font-size: var(
   display: block;
   object-fit: contain;
   object-position: center;
-  filter: grayscale(1) contrast(1.08) brightness(.98);
+  filter: contrast(1.08) brightness(.98);
   background: var(--grey-100);
   transition: filter .55s var(--ease-out), transform .8s var(--ease-out);
 }
-.watch-photo:hover { filter: grayscale(1) contrast(1.14) brightness(1.02); }
+.watch-photo:hover { filter: contrast(1.14) brightness(1.02); }
 .product-art .watch-photo { inline-size: 100%; block-size: 100%; position: absolute; inset: 0; }
 .product-art .watch-photo + .art-fallback { position: absolute; inset: 0; display: grid; place-items: center; }
 .product-card:hover .watch-photo { transform: scale(1.055); }

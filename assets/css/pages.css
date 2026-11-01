@@ -13,6 +13,7 @@
 .trust-item { display: flex; gap: .9rem; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.1rem 1.3rem; min-inline-size: 300px; flex: none; transform: skewX(7deg); transition: transform .3s var(--ease-spring), box-shadow .3s; }
 .trust-item:hover { transform: skewX(7deg) translateY(-4px); box-shadow: var(--shadow-md); }
 .trust-item .icon { color: var(--black); }
+.trust-item strong, .trust-item p { font-style: italic; }
 .trust-item p { margin: 0; }
 @keyframes trustMarquee { from { transform: translateX(0) skewX(-7deg); } to { transform: translateX(-50%) skewX(-7deg); } }
 [dir="rtl"] .trust-strip-track { animation-name: trustMarqueeRtl; }

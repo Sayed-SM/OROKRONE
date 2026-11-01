@@ -141,8 +141,20 @@ async function init() {
   if (getMode() === 'local') console.info('[orokrone] demo/local data mode');
 
   qs('#copy-coupon').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText('WELCOME10'); } catch { /* clipboard may be blocked */ }
-    toast(t('home.copied'));
+    let copied = false;
+    try { await navigator.clipboard.writeText('WELCOME10'); copied = true; } catch {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = 'WELCOME10';
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        copied = true;
+      } catch { /* ignore */ }
+    }
+    toast(copied ? t('home.copied') : 'WELCOME10', { type: copied ? 'success' : 'info' });
   });
   qs('#newsletter-form').addEventListener('submit', (e) => {
     e.preventDefault();

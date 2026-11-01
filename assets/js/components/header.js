@@ -92,7 +92,7 @@ function footerHTML() {
     </div>
     <div class="container footer-bottom">
       <span>© <span data-year></span> ${CONFIG.STORE_NAME} — <span data-i18n="footer.rights">${t('footer.rights')}</span></span>
-      <span>${t('checkout.cod')} · ${t('trust.authentic')}</span>
+
     </div>
   </footer>`;
 }

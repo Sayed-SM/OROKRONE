@@ -12,8 +12,8 @@
 .showcase-hero .lead { max-inline-size: 58ch; color: var(--ink-700); font-size: clamp(.98rem, 1.7vw, 1.08rem); }
 .showcase-section .eyebrow { color: var(--gold-600); }
 .showcase-section .eyebrow::before { background: var(--gold-400); }
-.showcase-section .btn-gold { background: linear-gradient(135deg, var(--gold-300), var(--gold-500)); color: #2A1F08; }
-.showcase-section .btn-gold:hover:not(:disabled) { background: linear-gradient(135deg, var(--gold-200), var(--gold-400)); box-shadow: 0 12px 36px rgba(0,0,0,.25); }
+.showcase-section .btn-gold { background: var(--black); color: #FFFFFF; }
+.showcase-section .btn-gold:hover:not(:disabled) { background: var(--grey-800); box-shadow: 0 12px 36px rgba(0,0,0,.25); }
 .showcase-section .btn-outline { background: rgba(255,255,255,.55); border-color: var(--gold-300); color: var(--ink-800); }
 .showcase-section .btn-outline:hover:not(:disabled) { background: var(--gold-50); border-color: var(--gold-400); }
 .showcase-section .btn-ghost { color: var(--ink-700); }
@@ -139,7 +139,7 @@
 
 /* caption + controls */
 .stage-caption { position: relative; z-index: 6; display: grid; justify-items: center; gap: .5rem; text-align: center; margin-block-start: calc(var(--sp-6) * -1); padding-block-end: var(--sp-6); }
-.stage-caption .brand-line { color: #C6C6C6; font-weight: 700; font-size: var(--fs-sm); }
+.stage-caption .brand-line { color: var(--ink-700); font-weight: 700; font-size: var(--fs-sm); }
 .stage-caption h2 { font-size: var(--fs-2xl); font-family: var(--font-display); }
 .stage-caption .price-line { display: flex; align-items: baseline; gap: .7rem; font-size: var(--fs-xl); }
 .stage-caption .price-line del { color: #D0D0D0; font-size: var(--fs-base); }

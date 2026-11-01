@@ -83,7 +83,7 @@
 }
 .product-art .watch-art { block-size: 88%; inline-size: auto; filter: drop-shadow(0 16px 18px rgba(63, 48, 24, .18)); transition: transform .55s var(--ease-out); }
 .product-art .accessory-art { block-size: 74%; }
-.product-card:hover .product-art .watch-art { transform: translateY(-6px) scale(1.05) rotate(-2deg); }
+.product-card:hover .product-art .watch-art { transform: scale(1.07) rotate(-3deg); }
 .art-halo {
   position: absolute; inset-block-start: -20%; inset-inline-start: 50%; translate: -50% 0;
   inline-size: 130%; aspect-ratio: 1; border-radius: 50%; pointer-events: none;
@@ -242,16 +242,16 @@ table.data-table { inline-size: 100%; border-collapse: collapse; font-size: var(
 .drawer-panel a { padding: .9rem .5rem; font-weight: 700; border-block-end: 1px solid var(--border); display: flex; align-items: center; gap: .7rem; }
 
 /* ============ Footer ============ */
-.site-footer { background: var(--ink-900); color: #CDC3B2; margin-block-start: var(--sp-8); }
+.site-footer { background: var(--ink-900); color: #D4D4D4; margin-block-start: var(--sp-8); }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.3fr; gap: var(--sp-6); padding-block: var(--sp-7); }
 .site-footer h2 { color: var(--ivory-100); margin-block-end: 1rem; font-size: var(--fs-base); }
 .site-footer a { display: flex; align-items: center; min-block-size: 44px; padding-block: .3rem; font-size: var(--fs-sm); }
-.site-footer a:hover { color: var(--gold-300); }
-.footer-brand { font-family: var(--font-latin-display); font-size: 1.8rem; color: var(--gold-300); letter-spacing: .06em; }
+.site-footer a:hover { color: #FFFFFF; }
+.footer-brand { font-family: var(--font-latin-display); font-size: 1.8rem; color: #FFFFFF; letter-spacing: .06em; }
 .footer-about { font-size: var(--fs-sm); max-inline-size: 34ch; margin-block-start: .8rem; }
 .footer-contact { display: grid; gap: .7rem; font-size: var(--fs-sm); }
 .footer-contact div { display: flex; gap: .6rem; align-items: center; }
-.footer-contact .icon { color: var(--gold-400); }
+.footer-contact .icon { color: #B0B0B0; }
 .footer-bottom { border-block-start: 1px solid #3A3227; padding-block: 1.2rem; display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; font-size: var(--fs-xs); }
 
 @media (max-width: 980px) {
@@ -286,7 +286,7 @@ table.data-table { inline-size: 100%; border-collapse: collapse; font-size: var(
 .watch-photo:hover { filter: contrast(1.14) brightness(1.02); }
 .product-art .watch-photo { inline-size: 100%; block-size: 100%; position: absolute; inset: 0; }
 .product-art .watch-photo + .art-fallback { position: absolute; inset: 0; display: grid; place-items: center; }
-.product-card:hover .watch-photo { transform: scale(1.055); }
+.product-card:hover .watch-photo { transform: scale(1.07) rotate(-3deg); }
 .cart-item-art .watch-photo { inline-size: 100%; block-size: 100%; border-radius: inherit; }
 .cart-item-art .art-fallback { display: grid; place-items: center; }
 .gallery-frame .watch-photo { inline-size: 100%; block-size: 100%; position: absolute; inset: 0; }
@@ -391,4 +391,76 @@ body:has(.site-header) .site-header:hover { box-shadow: 0 10px 28px rgba(0,0,0,.
     background: var(--grey-300); border-radius: 2px; margin: .75rem auto .25rem;
   }
   .gov-option { min-block-size: 48px; }
+}
+
+
+/* Header actions professional hover animations */
+.header-actions .icon-btn {
+  transition: transform .25s var(--ease-spring), background .2s, color .2s, box-shadow .25s;
+}
+.header-actions .icon-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.header-actions .icon-btn:active {
+  transform: translateY(0) scale(.95);
+}
+.lang-btn {
+  transition: transform .25s var(--ease-spring), background .2s, color .2s;
+}
+.lang-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+.nav-toggle {
+  transition: transform .25s var(--ease-spring), background .2s;
+}
+.nav-toggle:hover {
+  transform: rotate(90deg);
+}
+.nav-toggle:active {
+  transform: rotate(90deg) scale(.9);
+}
+
+
+/* Shop sort dropdown - modern professional design */
+#shop-sort {
+  appearance: none; -webkit-appearance: none;
+  min-block-size: 44px; padding: .6rem 2.5rem .6rem 1rem;
+  border: 1px solid var(--border-strong); border-radius: var(--r-md);
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B6B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat;
+  background-position: right .75rem center;
+  color: var(--text); font-size: var(--fs-sm); font-weight: 600;
+  cursor: pointer; transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+#shop-sort:hover { border-color: var(--ink-700); }
+#shop-sort:focus { outline: none; border-color: var(--ink-900); box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
+[dir="rtl"] #shop-sort {
+  background-position: left .75rem center;
+  padding: .6rem 1rem .6rem 2.5rem;
+}
+
+/* Shop search input - modern professional design */
+#shop-search {
+  min-block-size: 44px; padding: .6rem 1rem .6rem 2.5rem;
+  border: 1px solid var(--border-strong); border-radius: var(--r-md);
+  background: var(--surface); color: var(--text); font-size: var(--fs-base);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+#shop-search:hover { border-color: var(--ink-700); }
+#shop-search:focus { outline: none; border-color: var(--ink-900); box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
+.input-with-icon { position: relative; }
+.input-with-icon .icon { position: absolute; inset-inline-start: .75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+
+/* Mobile drawer close button - professional */
+.drawer-panel > .icon-btn[data-drawer-close] {
+  position: absolute; inset-block-start: .75rem; inset-inline-end: .75rem;
+  inline-size: 40px; block-size: 40px; border-radius: var(--r-pill);
+  background: var(--grey-100); color: var(--ink-700);
+  transition: transform .25s var(--ease-spring), background .2s, color .2s;
+}
+.drawer-panel > .icon-btn[data-drawer-close]:hover {
+  transform: rotate(90deg) scale(1.05); background: var(--grey-200); color: var(--ink-900);
+}
+.drawer-panel > .icon-btn[data-drawer-close]:active {
+  transform: rotate(90deg) scale(.9);
 }

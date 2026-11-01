@@ -7,6 +7,11 @@ import { listProducts } from '../lib/db.js';
 import { plainNumber } from '../lib/pricing.js';
 
 const params = new URLSearchParams(location.search);
+const SORT_OPTIONS = [
+  ['featured', 'shop.sortFeatured'], ['new', 'shop.sortNew'],
+  ['price_asc', 'shop.sortPriceAsc'], ['price_desc', 'shop.sortPriceDesc'], ['rating', 'shop.sortRating'],
+];
+const validSorts = new Set(SORT_OPTIONS.map(([value]) => value));
 const state = {
   q: params.get('q') || '',
   category: params.get('category') || '',
@@ -16,7 +21,7 @@ const state = {
   maxPrice: null,
   inStock: false,
   onSale: false,
-  sort: params.get('sort') || 'featured',
+  sort: validSorts.has(params.get('sort')) ? params.get('sort') : 'featured',
 };
 let products = [];
 
@@ -83,6 +88,79 @@ function renderGrid() {
   history.replaceState(null, '', url);
 }
 
+function renderSortOptions() {
+  const value = qs('#shop-sort');
+  const label = qs('#shop-sort-value');
+  const trigger = qs('#shop-sort-trigger');
+  const options = qs('#shop-sort-options');
+  if (!value || !label || !trigger || !options) return;
+  value.value = state.sort;
+  const current = SORT_OPTIONS.find(([sort]) => sort === state.sort) || SORT_OPTIONS[0];
+  const wasOpen = !options.hidden;
+  label.textContent = t(current[1]);
+  trigger.setAttribute('aria-label', `${t('shop.sort')}: ${t(current[1])}`);
+  options.setAttribute('aria-label', t('shop.sort'));
+  options.innerHTML = SORT_OPTIONS.map(([sort, key]) => `
+    <button class="sort-option" type="button" role="menuitemradio" aria-checked="${sort === state.sort}" tabindex="-1" data-sort="${sort}">${t(key)}</button>`).join('');
+  if (wasOpen) options.querySelector(`[data-sort="${state.sort}"]`)?.focus();
+}
+
+function closeSortMenu({ restoreFocus = false } = {}) {
+  const menu = qs('#shop-sort-options');
+  const trigger = qs('#shop-sort-trigger');
+  if (!menu || !trigger || menu.hidden) return;
+  menu.hidden = true;
+  trigger.setAttribute('aria-expanded', 'false');
+  if (restoreFocus) trigger.focus();
+}
+
+function chooseSort(value) {
+  if (!validSorts.has(value)) return;
+  state.sort = value;
+  renderSortOptions();
+  closeSortMenu({ restoreFocus: true });
+  renderGrid();
+}
+
+function bindSortMenu() {
+  const control = qs('#shop-sort-control');
+  const trigger = qs('#shop-sort-trigger');
+  const menu = qs('#shop-sort-options');
+  if (!control || !trigger || !menu) return;
+
+  const open = () => {
+    menu.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+    menu.querySelector(`[data-sort="${state.sort}"]`)?.focus();
+  };
+  trigger.addEventListener('click', () => menu.hidden ? open() : closeSortMenu());
+  trigger.addEventListener('keydown', (event) => {
+    if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) { event.preventDefault(); open(); }
+    else if (event.key === 'Escape') closeSortMenu();
+  });
+  menu.addEventListener('click', (event) => {
+    const option = event.target.closest('[data-sort]');
+    if (option) chooseSort(option.dataset.sort);
+  });
+  menu.addEventListener('keydown', (event) => {
+    const options = [...menu.querySelectorAll('[role="menuitemradio"]')];
+    const index = options.indexOf(document.activeElement);
+    if (event.key === 'ArrowDown') { event.preventDefault(); options[Math.min(index + 1, options.length - 1)]?.focus(); }
+    else if (event.key === 'ArrowUp') { event.preventDefault(); options[Math.max(index - 1, 0)]?.focus(); }
+    else if (event.key === 'Home') { event.preventDefault(); options[0]?.focus(); }
+    else if (event.key === 'End') { event.preventDefault(); options.at(-1)?.focus(); }
+    else if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      const option = document.activeElement.closest('[data-sort]');
+      if (option) chooseSort(option.dataset.sort);
+    } else if (event.key === 'Escape') { event.preventDefault(); closeSortMenu({ restoreFocus: true }); }
+    else if (event.key === 'Tab') closeSortMenu();
+  });
+  document.addEventListener('click', (event) => {
+    if (!control.contains(event.target)) closeSortMenu();
+  });
+}
+
 function resetFilters() {
   Object.assign(state, { q: '', category: '', brand: '', strap: '', minPrice: null, maxPrice: null, inStock: false, onSale: false });
   qs('#shop-search').value = '';
@@ -101,16 +179,16 @@ async function init() {
   qs('#filters-toggle').innerHTML = `${icon('filter', 'icon-sm')}<span>${t('shop.filters')}</span>`;
   qs('.input-with-icon').insertAdjacentHTML('afterbegin', icon('search'));
   qs('#shop-search').value = state.q;
-  qs('#shop-sort').value = state.sort;
+  renderSortOptions();
 
   products = await listProducts();
   renderFilters();
   renderGrid();
   bindProductCards(document, (id) => products.find((p) => p.id === id));
-  onLangChange(() => { renderFilters(); renderGrid(); });
+  onLangChange(() => { renderFilters(); renderSortOptions(); renderGrid(); });
 
   qs('#shop-search').addEventListener('input', debounce((e) => { state.q = e.target.value.trim(); renderGrid(); }, 220));
-  qs('#shop-sort').addEventListener('change', (e) => { state.sort = e.target.value; renderGrid(); });
+  bindSortMenu();
   qs('#filters-panel').addEventListener('click', (e) => {
     const chip = e.target.closest('[data-filter]');
     if (!chip) return;

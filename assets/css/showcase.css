@@ -144,6 +144,7 @@
 .stage-caption .price-line { display: flex; align-items: baseline; gap: .7rem; font-size: var(--fs-xl); }
 .stage-caption .price-line del { color: #D0D0D0; font-size: var(--fs-base); }
 .stage-caption .caption-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem; margin-block-start: .6rem; }
+.stage-empty { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 1rem; color: var(--text-muted); text-align: center; }
 .stage-controls { display: flex; align-items: center; justify-content: center; gap: var(--sp-4); position: relative; z-index: 6; padding-block-end: var(--sp-6); }
 .stage-dots { display: flex; gap: .2rem; }
 .stage-dots button { inline-size: 44px; block-size: 44px; min-inline-size: 44px; min-block-size: 44px; display: grid; place-items: center; border-radius: 50%; background: transparent; transition: background .25s; padding: 0; }
@@ -185,9 +186,9 @@
   .showcase-hero { padding-block-start: 1.25rem; gap: .65rem; }
   .showcase-hero .display { font-size: clamp(2.2rem, 10vw, 3.1rem); }
   .showcase-hero .lead { font-size: var(--fs-base); line-height: 1.55; }
-  .stage { block-size: 440px; margin-block-start: 0; }
-  .stage-item { inline-size: 126px; margin-inline-start: -63px; margin-block-start: -66px; }
-  .stage-media { inline-size: 132px; }
+  .stage { block-size: clamp(270px, 78vw, 330px); margin-block-start: 0; }
+  .stage-item { inline-size: 200px; margin-inline-start: -100px; margin-block-start: -88px; transition: opacity .3s, filter .3s; }
+  .stage-media { inline-size: clamp(150px, 45vw, 176px); }
   .podium { inline-size: 112px; margin-block-start: -8px; }
   .podium-top { block-size: 30px; }
   .stage-item .podium-body { block-size: calc(var(--podium-h, 90px) * .72); }
@@ -197,4 +198,6 @@
   .showcase-dialog .art-box { padding: 0; }
   .showcase-dialog .watch-art { block-size: 250px; }
   .stage-caption h2 { font-size: var(--fs-xl); }
+  .stage-item.is-active .stage-media { translate: 0 -8px; }
+  .stage-item .podium { display: none; }
 }

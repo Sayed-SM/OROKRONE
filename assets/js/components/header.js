@@ -4,6 +4,9 @@ import { wishlist } from '../lib/wishlist.js';
 import { compare } from '../lib/compare.js';
 import { CONFIG } from '../lib/config.js';
 import { icon } from './ui.js';
+import { esc } from '../lib/validate.js';
+
+let announcementSettings = null;
 
 const LOGO = `<svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
   <circle cx="20" cy="20" r="17" stroke="currentColor" stroke-width="2"/>
@@ -14,9 +17,13 @@ const LOGO = `<svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidde
 
 function headerHTML(active) {
   const link = (href, key, name) => `<a href="${href}" class="${active === name ? 'is-active' : ''}" data-i18n="${key}">${t(key)}</a>`;
+  const announcementText = announcementSettings
+    ? (getLang() === 'ar' ? announcementSettings.text_ar : announcementSettings.text_en)
+    : t('home.offerLead');
+  const announcementVisible = announcementSettings ? announcementSettings.enabled : true;
   return `
-  <div class="announce" data-i18n-attr="aria-label:home.offerTitle">
-    <span data-i18n="home.offerLead">${t('home.offerLead')}</span>
+  <div class="announce${announcementVisible ? '' : ' is-hidden'}" aria-label="${esc(t('home.offerTitle'))}">
+    <span>${esc(announcementText)}</span>
   </div>
   <header class="site-header">
     <div class="container header-inner">
@@ -52,7 +59,6 @@ function headerHTML(active) {
       <a href="compare.html">${icon('compare')}<span data-i18n="nav.compare">${t('nav.compare')}</span></a>
       <a href="track.html">${icon('truck')}<span data-i18n="nav.track">${t('nav.track')}</span></a>
       <a href="account.html">${icon('user')}<span data-i18n="nav.account">${t('nav.account')}</span></a>
-      <a href="admin/login.html">${icon('lock')}<span data-i18n="nav.admin">${t('nav.admin')}</span></a>
     </div>
   </div>`;
 }
@@ -105,6 +111,19 @@ export function updateBadges() {
       el.dataset.count = String(value);
     });
   });
+}
+
+export function setAnnouncementSettings(settings) {
+  announcementSettings = settings && typeof settings === 'object' ? settings : null;
+  const host = document.querySelector('.announce');
+  if (!host) return;
+  const text = announcementSettings
+    ? (getLang() === 'ar' ? announcementSettings.text_ar : announcementSettings.text_en)
+    : t('home.offerLead');
+  host.classList.toggle('is-hidden', announcementSettings?.enabled === false);
+  host.setAttribute('aria-label', t('home.offerTitle'));
+  const content = host.querySelector('span');
+  if (content) content.textContent = text || '';
 }
 
 export function mountChrome({ active = '', base = '' } = {}) {

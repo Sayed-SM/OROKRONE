@@ -9,6 +9,8 @@ import { SEED_PRODUCTS, SEED_REVIEWS, SEED_COUPONS, SHIPPING_RATES } from './see
 import { STORAGE_KEYS, CONFIG } from './config.js';
 import { computeTotals } from './pricing.js';
 import { cleanText } from './validate.js';
+import { activeShippingRates, normalizeShippingRate } from './shipping-rates.js';
+import { auth } from './auth.js';
 
 let mode = null;
 export const getMode = () => mode || 'local';
@@ -23,6 +25,7 @@ const localProducts = () => readJSON(STORAGE_KEYS.demoProducts, SEED_PRODUCTS);
 const saveLocalProducts = (items) => writeJSON(STORAGE_KEYS.demoProducts, items);
 const localOrders = () => readJSON(STORAGE_KEYS.demoOrders, []);
 const saveLocalOrders = (items) => writeJSON(STORAGE_KEYS.demoOrders, items);
+const localShippingRates = () => readJSON(STORAGE_KEYS.demoShippingRates, SHIPPING_RATES);
 const localReviews = () => [...readJSON(STORAGE_KEYS.demoReviews, []), ...SEED_REVIEWS];
 
 async function withRemote(remoteFn, localFn) {
@@ -110,8 +113,8 @@ export async function getShippingRates() {
   return withRemote(async (sb) => {
     const { data, error } = await sb.from('shipping_rates').select('*').eq('active', true).order('governorate');
     if (error) throw error;
-    return data?.length ? data : SHIPPING_RATES;
-  }, () => SHIPPING_RATES);
+    return activeShippingRates(data || []);
+  }, () => activeShippingRates(localShippingRates()));
 }
 
 /* --------------------------------- reviews -------------------------------- */
@@ -208,13 +211,15 @@ export async function placeOrder(payload) {
 
   const createLocally = () => {
     const products = localProducts();
+    const rates = activeShippingRates(localShippingRates());
+    if (!rates.some((rate) => rate.governorate === body.customer.governorate)) throw new Error('shipping_unavailable');
     const items = body.items.map((it) => {
       const product = products.find((p) => p.id === it.id);
       if (!product || product.stock < it.qty) throw new Error('out_of_stock');
       return { ...it, price: product.price, name_ar: product.name_ar, name_en: product.name_en, design: product.design, slug: product.slug };
     });
     const coupon = body.coupon_code ? SEED_COUPONS.find((c) => c.code === body.coupon_code) : null;
-    const totals = computeTotals({ items, coupon, governorate: body.customer.governorate, rates: SHIPPING_RATES });
+    const totals = computeTotals({ items, coupon, governorate: body.customer.governorate, rates });
     const order = {
       id: `local-${Date.now()}`,
       order_no: `ORK-${new Date().getFullYear()}-${String(localOrders().length + 1).padStart(4, '0')}`,
@@ -407,6 +412,53 @@ export const admin = {
     });
   },
 
+  async listShippingRates() {
+    return withAdminRemote(async (sb) => {
+      const { data, error } = await sb.from('shipping_rates').select('*').order('governorate');
+      if (error) throw error;
+      return data || [];
+    }, () => localShippingRates());
+  },
+
+  async saveShippingRate(rate, originalGovernorate = '') {
+    const normalized = normalizeShippingRate(rate);
+    const original = String(originalGovernorate || '').trim();
+    return withAdminRemote(async (sb) => {
+      if (original && original !== normalized.governorate) {
+        const { data, error } = await sb.from('shipping_rates').update(normalized)
+          .eq('governorate', original).select().single();
+        if (error) throw error;
+        return data;
+      }
+      const { data, error } = await sb.from('shipping_rates').upsert(normalized)
+        .select().single();
+      if (error) throw error;
+      return data;
+    }, () => {
+      const rates = localShippingRates();
+      const index = original ? rates.findIndex((item) => item.governorate === original) : -1;
+      const duplicate = rates.some((item, i) => item.governorate === normalized.governorate && i !== index);
+      if (duplicate) throw new Error('governorate_exists');
+      if (index >= 0) rates[index] = normalized;
+      else rates.push(normalized);
+      writeJSON(STORAGE_KEYS.demoShippingRates, rates);
+      return normalized;
+    });
+  },
+
+  async deleteShippingRate(governorate) {
+    const name = String(governorate || '').trim();
+    if (!name) throw new Error('invalid_governorate');
+    return withAdminRemote(async (sb) => {
+      const { error } = await sb.from('shipping_rates').delete().eq('governorate', name);
+      if (error) throw error;
+      return { ok: true };
+    }, () => {
+      writeJSON(STORAGE_KEYS.demoShippingRates, localShippingRates().filter((rate) => rate.governorate !== name));
+      return { ok: true };
+    });
+  },
+
   async stats() {
     return withRemote(async (sb) => {
       const { data, error } = await sb.from('orders').select('*, order_items(*)')
@@ -436,6 +488,23 @@ export const admin = {
     }
   },
 };
+
+async function withAdminRemote(remoteFn, localFn) {
+  const localHost = typeof location !== 'undefined' && ['localhost', '127.0.0.1'].includes(location.hostname);
+  if (localHost && (await auth.user())?.id === 'demo-admin') {
+    mode = 'local';
+    return localFn();
+  }
+  const sb = await getSupabase();
+  if (sb) {
+    const result = await remoteFn(sb);
+    mode = 'remote';
+    return result;
+  }
+  if (!localHost) throw new Error('backend_unavailable');
+  mode = 'local';
+  return localFn();
+}
 
 function computeStats(orders, products) {
   const valid = orders.filter((o) => o.status !== 'cancelled');

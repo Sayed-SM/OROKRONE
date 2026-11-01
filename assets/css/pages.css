@@ -27,14 +27,23 @@
   background: linear-gradient(160deg, var(--surface), var(--ivory-200)); border: 1px solid var(--border);
   transition: transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med);
 }
-.collection-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+.collection-card:hover, .collection-card:focus-visible { transform: translateY(-5px); box-shadow: var(--shadow-md); }
 .collection-art { display: grid; place-items: center; block-size: 210px; padding-block-start: 1rem; }
 .collection-art .watch-art { block-size: 200px; inline-size: auto; filter: drop-shadow(0 12px 14px rgba(63,48,24,.2)); transition: transform .5s var(--ease-out); }
-.collection-card:hover .watch-art { transform: scale(1.07) rotate(-3deg); }
+.collection-card:hover .watch-art, .collection-card:focus-visible .watch-art { transform: scale(1.07) rotate(-3deg); }
 .collection-meta { display: grid; gap: .15rem; padding: 1rem 1.3rem 1.3rem; background: rgba(255,255,255,.65); }
 .collection-meta strong { font-size: var(--fs-lg); }
 .collection-cta { display: inline-flex; align-items: center; gap: .4rem; color: var(--gold-600); font-weight: 700; font-size: var(--fs-sm); margin-block-start: .4rem; }
 [dir="rtl"] .collection-cta .icon { transform: scaleX(-1); }
+
+/* Match the collection-card interaction across key storefront cards. */
+.product-card, .testimonial { transition: transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med); }
+.product-card:hover, .product-card:focus-within, .testimonial:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.collection-card:focus-visible { outline: 2px solid var(--ink-900); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .collection-card, .collection-card .watch-art, .product-card, .testimonial { transition: none !important; }
+  .collection-card:hover, .product-card:hover, .testimonial:hover { transform: none; }
+}
 
 /* Home — offer */
 .offer-banner {
@@ -42,7 +51,8 @@
   padding: var(--sp-6); border-radius: var(--r-xl); position: relative; overflow: hidden;
   background: linear-gradient(120deg, var(--surface), var(--grey-200) 45%, var(--grey-300)); border: 1px solid var(--grey-300);
 }
-.offer-banner::after { content: ""; position: absolute; inset-inline-end: -60px; inset-block-start: -60px; inline-size: 260px; block-size: 260px; border-radius: 50%; border: 30px solid rgba(255,255,255,.35); }
+.offer-banner::after { content: ""; position: absolute; z-index: 0; pointer-events: none; inset-inline-end: -60px; inset-block-start: -60px; inline-size: 260px; block-size: 260px; border-radius: 50%; border: 30px solid rgba(255,255,255,.35); }
+.offer-banner > * { position: relative; z-index: 1; }
 .offer-banner h2 { font-size: var(--fs-3xl); letter-spacing: .08em; }
 .offer-banner p { max-inline-size: 52ch; }
 

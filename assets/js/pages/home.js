@@ -1,5 +1,5 @@
 import { initI18n, t, onLangChange } from '../i18n/i18n.js';
-import { mountChrome } from '../components/header.js';
+import { mountChrome, setAnnouncementSettings } from '../components/header.js';
 import { initShowcase } from '../components/showcase.js';
 import { productCard, bindProductCards } from '../components/product-card.js';
 import { icon, stars, toast, skeletonCards, qs } from '../components/ui.js';
@@ -7,22 +7,21 @@ import { observeReveals } from '../lib/spring.js';
 import { listProducts, getMode } from '../lib/db.js';
 import { SEED_REVIEWS } from '../lib/seed.js';
 import { productArt } from '../lib/watch-svg.js';
-import { loadShowcaseSettings } from '../lib/showcase-settings.js';
+import { getStorefrontSettings } from '../lib/storefront-settings.js';
 import { esc, isEmail } from '../lib/validate.js';
 import { plainNumber } from '../lib/pricing.js';
 import { initMotion } from '../lib/motion.js';
 
 let products = [];
+let storefrontSettings = null;
 
 function renderTrust() {
-  const items = [
-    ['wallet', 'trust.cod', 'trust.codD'],
-    ['truck', 'trust.shipping', 'trust.shippingD'],
-    ['shield', 'trust.warranty', 'trust.warrantyD'],
-    ['award', 'trust.authentic', 'trust.authenticD'],
-  ].map(([ic, title, desc]) => `
-    <div class="trust-item">${icon(ic, 'icon-lg')}<div><strong data-i18n="${title}">${t(title)}</strong><p class="muted small" data-i18n="${desc}">${t(desc)}</p></div></div>`).join('');
-  qs('#trust-strip').innerHTML = `<div class="trust-strip-track">${items}${items}</div>`;
+  const active = (storefrontSettings?.trust || []).filter((item) => item.enabled);
+  const items = active.map((item) => `
+    <div class="trust-item">${icon(item.icon, 'icon-lg')}<div><strong>${esc(item[`title_${document.documentElement.lang}`])}</strong><p class="muted small">${esc(item[`description_${document.documentElement.lang}`])}</p></div></div>`).join('');
+  const host = qs('#trust-strip');
+  host.hidden = !active.length;
+  host.innerHTML = active.length ? `<div class="trust-strip-track">${items}${items}</div>` : '';
 }
 
 function renderFeatured() {
@@ -56,18 +55,20 @@ function renderCollections() {
 }
 
 function renderCraft() {
+  const craft = storefrontSettings?.craft;
   const hero = products.find((p) => p.id === 'p-royale-twotone-white') || products[0];
-  if (hero) qs('#craft-art').innerHTML = `<div class="craft-art-frame">${productArt(hero, { width: 320, height: 540 })}</div>`;
-  qs('#craft-features').innerHTML = [
-    ['clock', 'home.craft1T', 'home.craft1D'],
-    ['shield', 'home.craft2T', 'home.craft2D'],
-    ['award', 'home.craft3T', 'home.craft3D'],
-  ].map(([ic, title, desc]) => `
-    <div class="craft-feature">${icon(ic)}<div><strong data-i18n="${title}">${t(title)}</strong><p class="muted small" data-i18n="${desc}">${t(desc)}</p></div></div>`).join('');
-  qs('#stats-row').innerHTML = [
-    [12, 'home.statsYears'], [4800, 'home.statsPieces'], [3200, 'home.statsClients'], [27, 'home.statsCities'],
-  ].map(([value, label]) => `
-    <div class="stat"><strong>${plainNumber(value)}${value === 4800 || value === 3200 ? '+' : ''}</strong><span class="muted small" data-i18n="${label}">${t(label)}</span></div>`).join('');
+  const lang = document.documentElement.lang;
+  const art = craft?.image_url
+    ? `<img class="watch-art watch-photo" src="${esc(craft.image_url)}" alt="${esc(craft[`heading_${lang}`])}" width="600" height="720" loading="lazy">`
+    : (hero ? productArt(hero, { width: 320, height: 540 }) : '');
+  qs('#craft-art').innerHTML = art ? `<div class="craft-art-frame">${art}</div>` : '';
+  qs('.craft-copy .eyebrow').textContent = lang === 'ar' ? 'فحص دقيق لكل قطعة' : 'A careful check on every piece';
+  qs('.craft-copy h2').textContent = craft?.[`heading_${lang}`] || '';
+  qs('.craft-copy .lead').textContent = craft?.[`lead_${lang}`] || '';
+  qs('#craft-features').innerHTML = (craft?.features || []).filter((item) => item.enabled).map((item) => `
+    <div class="craft-feature">${icon(item.icon)}<div><strong>${esc(item[`title_${lang}`])}</strong><p class="muted small">${esc(item[`description_${lang}`])}</p></div></div>`).join('');
+  qs('#stats-row').innerHTML = (craft?.stats || []).filter((item) => item.enabled).map((item) => `
+    <div class="stat"><strong>${plainNumber(Number(item.value) || 0)}${esc(item.suffix)}</strong><span class="muted small">${esc(item[`label_${lang}`])}</span></div>`).join('');
 }
 
 function renderTestimonials() {
@@ -89,6 +90,29 @@ function renderDynamic() {
   renderTestimonials();
 }
 
+function renderShowcaseCopy() {
+  const showcase = storefrontSettings?.showcase;
+  if (!showcase) return;
+  const lang = document.documentElement.lang;
+  const heading = qs('.showcase-hero h1');
+  const lead = qs('.showcase-hero .lead');
+  if (heading) heading.textContent = showcase[`heading_${lang}`];
+  if (lead) lead.textContent = showcase[`lead_${lang}`];
+  const section = qs('#showcase');
+  if (!section) return;
+  section.dataset.theme = showcase.theme;
+  if (showcase.backgroundImage) {
+    const resolved = new URL(showcase.backgroundImage, location.href).href;
+    section.style.backgroundImage = `linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.62)), url(${JSON.stringify(resolved)})`;
+    section.style.backgroundSize = 'cover';
+    section.style.backgroundPosition = 'center';
+  } else {
+    section.style.backgroundImage = '';
+    section.style.backgroundSize = '';
+    section.style.backgroundPosition = '';
+  }
+}
+
 async function init() {
   initI18n();
   mountChrome({ active: 'home' });
@@ -100,47 +124,27 @@ async function init() {
   document.querySelector('[data-stage-next]').innerHTML = icon('chevronLeft');
   document.querySelector('.autoplay-btn').innerHTML = icon('pause');
 
-  products = await listProducts();
-  const showcase = loadShowcaseSettings();
-  const heading = qs('.showcase-hero h1');
-  const lead = qs('.showcase-hero .lead');
-  if (heading) heading.textContent = document.documentElement.lang === 'ar' ? showcase.heading_ar : showcase.heading_en;
-  if (lead) lead.textContent = document.documentElement.lang === 'ar' ? showcase.lead_ar : showcase.lead_en;
-  const showcaseSection = qs('#showcase');
-  if (showcase.backgroundImage) {
-    const rawBg = String(showcase.backgroundImage || '').trim();
-    // Validate URL: allow http(s) URLs and relative paths, reject dangerous schemes
-    const isSafe = /^https?:\/\//.test(rawBg) || /^[a-zA-Z0-9_./-]+\.(jpe?g|png|webp|gif)$/i.test(rawBg);
-    const safeBg = isSafe ? rawBg.replace(/["'\\]/g, '') : '';
-    if (safeBg) {
-      showcaseSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.62)), url("${safeBg}")`;
-      showcaseSection.style.backgroundSize = 'cover';
-      showcaseSection.style.backgroundPosition = 'center';
-    }
-  } else {
-    showcaseSection.style.backgroundImage = '';
-    showcaseSection.style.backgroundSize = '';
-    showcaseSection.style.backgroundPosition = '';
-  }
-  showcaseSection.dataset.theme = showcase.theme;
-  const selected = showcase.productIds.length
-    ? showcase.productIds.map((id) => products.find((p) => p.id === id)).filter(Boolean)
-    : products.filter((p) => p.featured);
-  initShowcase(qs('#stage'), selected.length ? selected : products.slice(0, 6));
+  [products, storefrontSettings] = await Promise.all([listProducts(), getStorefrontSettings()]);
+  setAnnouncementSettings(storefrontSettings.announcement);
+  renderShowcaseCopy();
+  const selected = storefrontSettings.showcase.productIds === null
+    ? products.filter((p) => p.featured && !p.design?.accessory)
+    : storefrontSettings.showcase.productIds.map((id) => products.find((p) => p.id === id)).filter((p) => p && !p.design?.accessory);
+  initShowcase(qs('#stage'), selected);
   renderDynamic();
   observeReveals();
   initMotion();
-  qs('#trust-strip').innerHTML = `<div class="trust-strip-track">${qs('#trust-strip').innerHTML}${qs('#trust-strip').innerHTML}</div>`;
   bindProductCards(document, (id) => products.find((p) => p.id === id));
   onLangChange(() => {
-    const next = loadShowcaseSettings();
-    qs('.showcase-hero h1').textContent = document.documentElement.lang === 'ar' ? next.heading_ar : next.heading_en;
-    qs('.showcase-hero .lead').textContent = document.documentElement.lang === 'ar' ? next.lead_ar : next.lead_en;
+    setAnnouncementSettings(storefrontSettings.announcement);
+    renderShowcaseCopy();
     renderDynamic();
-    qs('#trust-strip').innerHTML = `<div class="trust-strip-track">${qs('#trust-strip').innerHTML}${qs('#trust-strip').innerHTML}</div>`;
   });
-  window.addEventListener('showcase:change', () => location.reload());
-  onLangChange(renderDynamic);
+  window.addEventListener('storefront-settings:change', () => location.reload());
+  if (typeof BroadcastChannel !== 'undefined') {
+    const channel = new BroadcastChannel('orokrone:storefront-settings');
+    channel.addEventListener('message', () => location.reload());
+  }
   if (getMode() === 'local') console.info('[orokrone] demo/local data mode');
 
   qs('#copy-coupon').addEventListener('click', async () => {

@@ -61,13 +61,13 @@
           <div class="input-with-icon">
             <input type="search" id="shop-search" data-i18n-attr="placeholder:shop.search" aria-label="search">
           </div>
-          <select id="shop-sort" data-i18n-attr="aria-label:shop.sort">
-            <option value="featured" data-i18n="shop.sortFeatured"></option>
-            <option value="new" data-i18n="shop.sortNew"></option>
-            <option value="price_asc" data-i18n="shop.sortPriceAsc"></option>
-            <option value="price_desc" data-i18n="shop.sortPriceDesc"></option>
-            <option value="rating" data-i18n="shop.sortRating"></option>
-          </select>
+          <div class="sort-control" id="shop-sort-control">
+            <button class="sort-trigger" id="shop-sort-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="shop-sort-options">
+              <span id="shop-sort-value"></span><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="sort-options" id="shop-sort-options" role="menu" aria-label="الترتيب" hidden></div>
+            <input type="hidden" id="shop-sort" name="sort" value="featured">
+          </div>
         </div>
         <p class="results-count" id="results-count" aria-live="polite"></p>
         <div class="product-grid" id="shop-grid"></div>

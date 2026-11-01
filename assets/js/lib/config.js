@@ -35,4 +35,6 @@ export const STORAGE_KEYS = {
   demoReviews: 'orokrone.demo.reviews.v1',
   demoUser: 'orokrone.demo.user.v1',
   demoProducts: 'orokrone.demo.products.v1',
+  demoShippingRates: 'orokrone.demo.shipping-rates.v1',
+  demoStorefrontSettings: 'orokrone.demo.storefront-settings.v1',
 };

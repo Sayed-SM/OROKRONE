@@ -14,7 +14,18 @@ import { CONFIG } from '../lib/config.js';
 
 export function initShowcase(host, products) {
   const items = products.filter((p) => !p.design?.accessory).slice(0, 7);
-  if (!items.length || !host) return;
+  if (!host) return;
+  const caption = document.querySelector('.stage-caption');
+  const dotsHost = document.querySelector('.stage-dots');
+  const controls = document.querySelector('.stage-controls');
+  if (!items.length) {
+    host.innerHTML = `<p class="stage-empty" role="status">${t('home.showcaseEmpty')}</p>`;
+    if (caption) caption.innerHTML = '';
+    if (dotsHost) dotsHost.innerHTML = '';
+    if (controls) controls.hidden = true;
+    return;
+  }
+  if (controls) controls.hidden = false;
 
   host.innerHTML = `
     <div class="arch arch-1"></div><div class="arch arch-2"></div><div class="arch arch-3"></div>
@@ -22,9 +33,6 @@ export function initShowcase(host, products) {
     <div class="stage-items"></div>
     <div class="stage-lighting"></div><div class="stage-vignette"></div>`;
   const ring = host.querySelector('.stage-items');
-  const caption = document.querySelector('.stage-caption');
-  const dotsHost = document.querySelector('.stage-dots');
-
   ring.innerHTML = items.map((p, i) => `
     <button class="stage-item" style="--index:${i}" data-index="${i}" data-tier="${i % 3}" aria-label="${esc(L(p, 'name'))}">
       <span class="stage-tooltip"><strong>${esc(L(p, 'name'))}</strong>${money(p.price)}</span>
@@ -57,8 +65,23 @@ export function initShowcase(host, products) {
   });
 
   function layout(rotation) {
-    let best = { depth: -2, index: 0 };
+    const mobileCarousel = window.matchMedia('(max-width: 600px)').matches;
+    const mobileIndex = ((Math.round(-rotation / step) % n) + n) % n;
+    let best = { depth: -2, index: mobileCarousel ? mobileIndex : 0 };
     nodes.forEach((node, i) => {
+      if (mobileCarousel) {
+        let distance = i - mobileIndex;
+        if (distance > n / 2) distance -= n;
+        if (distance < -n / 2) distance += n;
+        const x = distance * Math.min(148, host.clientWidth * 0.37);
+        const isCurrent = distance === 0;
+        node.style.transform = `translate3d(${x}px, ${isCurrent ? -10 : 2}px, 0) scale(${isCurrent ? 1 : 0.8})`;
+        node.style.zIndex = String(100 - Math.abs(distance));
+        node.style.opacity = String(Math.abs(distance) > 1 ? 0 : isCurrent ? 1 : 0.66);
+        node.classList.toggle('is-active', isCurrent);
+        node.tabIndex = isCurrent ? 0 : -1;
+        return;
+      }
       const angle = i * step + rotation;
       const depth = Math.cos(angle);              // 1 = front, -1 = back
       const front = (depth + 1) / 2;              // 0..1

@@ -9,6 +9,8 @@ const LINKS = [
   ['orders.html', 'orders', 'bag'],
   ['coupons.html', 'coupons', 'tag'],
   ['reviews.html', 'reviews', 'message'],
+  ['shipping.html', 'shipping', 'truck'],
+  ['content.html', 'content', 'edit'],
 ];
 
 export function mountAdmin(page) {

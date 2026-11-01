@@ -212,9 +212,13 @@ async function init() {
       location.href = 'order-success.html';
     } catch (err) {
       console.error('[checkout]', err);
-      const message = err.message === 'out_of_stock' ? t('product.outOfStock')
-        : err.message === 'shipping_unavailable' ? t('checkout.noShippingRates')
-        : err.message === 'backend_unavailable' || err.message === 'place_order_function_not_deployed'
+      const code = err.message || '';
+      const message = code === 'out_of_stock' ? t('product.outOfStock')
+        : code === 'product_unavailable' ? t('product.outOfStock')
+        : code === 'invalid_coupon' ? t('cart.couponInvalid')
+        : code === 'invalid_customer' || code === 'invalid_email' || code === 'invalid_qty' || code === 'invalid_items' ? t('validation.required')
+        : code === 'shipping_unavailable' || code === 'order_failed' ? t('checkout.backendUnavailable')
+        : code === 'origin_not_allowed' || code === 'unauthorized' || code === 'rate_limited' || code === 'backend_unavailable' || code === 'place_order_function_not_deployed'
           ? t('checkout.backendUnavailable') : t('toast.error');
       toast(message, { type: 'error' });
       btn.classList.remove('is-loading');

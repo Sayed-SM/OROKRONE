@@ -109,6 +109,10 @@ export const en = {
     name: 'Name', haveAccount: 'Already have an account?', noAccount: 'No account yet?',
     loginLead: 'Sign in to follow your orders and wishlist.', registerLead: 'Create your account in under a minute.',
     checkEmail: 'Check your inbox to confirm your account.', loggedIn: 'Signed in', loggedOut: 'Signed out',
+    resetTitle: 'Reset your password', resetLead: 'Enter your email and we will send a reset link.',
+    resetSent: 'A reset link has been sent to your email.', newPassword: 'New password',
+    confirmPassword: 'Confirm password', forgotPassword: 'Forgot your password?',
+    passwordMismatch: 'Passwords do not match', passwordUpdated: 'Password updated. You can now sign in.',
   },
   account: {
     title: 'My account', orders: 'My orders', noOrders: 'No orders yet', profile: 'My details',
@@ -158,7 +162,7 @@ export const en = {
     required: 'This field is required', phone: 'Enter a valid Egyptian mobile number (e.g. 01012345678)',
     email: 'Enter a valid email address', min: 'Value is below the minimum', short: 'Text is too short',
     maxQty: 'Maximum {n} pieces of this item', stockQty: 'Only {n} pieces available',
-    password: 'Password must be at least 6 characters',
+    password: 'Password must be at least 6 characters', passwordMismatch: 'Passwords do not match',
   },
   toast: {
     wishlistAdd: 'Added to wishlist', wishlistRemove: 'Removed from wishlist',

@@ -63,6 +63,23 @@ export const auth = {
     throw new Error('invalid_credentials');
   },
 
+  async resetPassword(email) {
+    const sb = await getSupabase();
+    if (!sb) throw new Error('backend_unavailable');
+    const redirectTo = `${location.origin}${location.pathname.replace(/[^/]*$/, '')}reset-password.html`;
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo });
+    if (error) throw error;
+    return { ok: true };
+  },
+
+  async updatePassword(newPassword) {
+    const sb = await getSupabase();
+    if (!sb) throw new Error('backend_unavailable');
+    const { error } = await sb.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+    return { ok: true };
+  },
+
   async signUp(email, password, fullName) {
     const sb = await getSupabase();
     if (sb) {

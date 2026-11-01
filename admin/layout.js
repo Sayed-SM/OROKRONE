@@ -17,7 +17,7 @@ export function mountAdmin(page) {
     <button class="admin-sidebar-scrim" data-admin-close aria-label="${t('nav.close')}"></button>
     <aside class="admin-sidebar" id="admin-sidebar">
       <div class="admin-sidebar-head">
-        <a class="admin-brand" href="index.html" aria-label="OROKRONE control room"><span class="admin-brand-mark">◷</span><span>OROKRONE<small>CONTROL ROOM</small></span></a>
+        <a class="admin-brand" href="index.html"><span class="admin-brand-mark">◷</span><span>OROKRONE<small>CONTROL ROOM</small></span></a>
         <button class="icon-btn admin-sidebar-close" type="button" data-admin-close aria-label="${t('nav.close')}" title="${t('nav.close')}">${icon('x')}</button>
       </div>
       <div class="admin-profile"><span class="admin-avatar">O</span><div><strong>OROKRONE</strong><small>Store manager</small></div></div>

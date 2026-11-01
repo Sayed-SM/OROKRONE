@@ -108,7 +108,10 @@ async function init() {
   if (lead) lead.textContent = document.documentElement.lang === 'ar' ? showcase.lead_ar : showcase.lead_en;
   const showcaseSection = qs('#showcase');
   if (showcase.backgroundImage) {
-    const safeBg = String(showcase.backgroundImage).replace(/["'()\\s]/g, '');
+    const rawBg = String(showcase.backgroundImage || '').trim();
+    // Validate URL: allow http(s) URLs and relative paths, reject dangerous schemes
+    const isSafe = /^https?:\/\//.test(rawBg) || /^[a-zA-Z0-9_./-]+\.(jpe?g|png|webp|gif)$/i.test(rawBg);
+    const safeBg = isSafe ? rawBg.replace(/["'\\]/g, '') : '';
     if (safeBg) {
       showcaseSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.62)), url("${safeBg}")`;
       showcaseSection.style.backgroundSize = 'cover';

@@ -21,7 +21,7 @@ body[data-admin-page] { background: #F3F3F3; }
 .admin-main { min-inline-size: 0; }
 .admin-topbar { min-block-size: 92px; padding: 1rem clamp(1rem, 3vw, 2.5rem); display: flex; align-items: center; justify-content: space-between; gap: 1rem; background: #fff; border-block-end: 1px solid #E5E5E5; }
 .admin-topbar h1 { font: 700 1.5rem var(--font-display); }
-.admin-breadcrumb { font-size: .75rem; color: #777; }
+.admin-breadcrumb { font-size: .75rem; color: #5A5A5A; }
 .admin-top-actions { display: flex; align-items: center; gap: .8rem; }
 .admin-live { display: inline-flex; align-items: center; gap: .4rem; font-size: .8rem; color: #444; }
 .admin-live i { inline-size: 8px; block-size: 8px; border-radius: 50%; background: #111; box-shadow: 0 0 0 4px #1112; animation: livePulse 1.8s infinite; }

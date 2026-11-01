@@ -31,3 +31,9 @@ supabase/config.toml.local
 # Misc
 *.bak
 *.old
+
+# Graphify output
+graphify-out/
+
+# OpenCode development intelligence (local only)
+AGENTS.md

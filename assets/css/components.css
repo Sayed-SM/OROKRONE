@@ -57,7 +57,7 @@
 .badge-gold { background: var(--gold-100); color: var(--gold-700); }
 .badge-sale { background: var(--sale-bg); color: var(--sale); }
 .badge-success { background: var(--success-bg); color: var(--success); }
-.badge-muted { background: var(--ivory-200); color: var(--ink-500); }
+.badge-muted { background: var(--ivory-200); color: var(--ink-700); }
 .badge-danger { background: var(--danger-bg); color: var(--danger); }
 .chip {
   min-block-size: 44px;
